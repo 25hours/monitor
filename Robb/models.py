@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 class Host(models.Model):
     name = models.CharField(max_length=64,unique=True)
     ip_addr = models.GenericIPAddressField(unique=True)
-    host_group = models.ManyToManyField("HostGroup",blank=True)
+    host_groups = models.ManyToManyField("HostGroups",blank=True)
     templates = models.ManyToManyField("Template",blank=True)
     monitored_by_choices = (
         ('agent','Agent'),
@@ -29,7 +29,7 @@ class Host(models.Model):
     def __str__(self):
         return self.name
 
-class HostGroup(models.Model):
+class HostGroups(models.Model):
     name = models.CharField(max_length=64,unique=True)
     templates = models.ManyToManyField('Template',blank=True)
     memo = models.TextField(u'备注',blank=True,null=True)

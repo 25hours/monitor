@@ -122,3 +122,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'Robb.UserProfile'
+
+#for monitor
+REDIS_CONN = {
+    'HOST':'localhost',
+    'PORT':6379,
+    'PASSWD':''
+}
+
+STATUS_DATA_OPTIMIZATION = {
+    'latest':[0,600],
+    '10mins':[600,600],     #4days
+    '30mins':[1800,600],    #14days
+    '60mins':[3600,600],    #25days
+}
