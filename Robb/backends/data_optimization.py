@@ -28,7 +28,7 @@ class DataStore(object):
         all_real_data = self.redis_conn_obj.lrange(lastest_data_key,1,-1)
         data_set = []
         for item in all_real_data:
-            data = json.loads(item)
+            data = json.loads(item.decode())
             if len(data) == 2:
                 service_data,last_save_time =data
                 if time.time() - last_save_time <= optimization_interval:
@@ -121,7 +121,7 @@ class DataStore(object):
         return optimized_dic
     def get_average(self,data_set):
         if len(data_set) > 0:
-            return sum(data_set)/len(data_set)
+            return sum(data_set)//len(data_set)
         else:
             return 0
     def get_max(self,data_set):
@@ -137,6 +137,6 @@ class DataStore(object):
     def get_mid(self,data_set):
         data_set.sort()
         if len(data_set) > 0:
-            return data_set[len(data_set)/2]
+            return data_set[len(data_set)//2]
         else:
             return 0

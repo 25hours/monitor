@@ -25,6 +25,13 @@ class ClientHandler(object):
         return self.client_configs
 
 def get_host_triggers(host_obj):
+    triggers = []
+    for template in host_obj.templates.select_related():
+        triggers.extend(template.triggers.select_related())
+    for group in host_obj.host_groups.select_related():
+        for template in group.templates.select_related():
+            triggers.extend(template.triggers.select_related())
+    return set(triggers)    #数据去重
 
 class TriggersView(object):
 

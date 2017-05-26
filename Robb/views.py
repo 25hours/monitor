@@ -2,9 +2,11 @@ from django.shortcuts import render,HttpResponse
 import json
 from monitor import settings
 from Robb.backends import redis_conn
+from Robb.backends import data_processing
 from Robb.backends import data_optimization
 from Robb.serializer import ClientHandler,get_host_triggers
 from django.views.decorators.csrf import csrf_exempt
+from Robb import models
 
 # Create your views here.
 REDIS_OBJ = redis_conn.redis_conn(settings)
@@ -20,7 +22,7 @@ def service_data_report(request):
     if request.method == 'POST':
         print("---->",request.POST)
         try:
-            print('host=%s,service=%s' %(request.POST.get('client_id')))
+            print('host=%s,service=%s' %(request.POST.get('client_id'),request.POST.get('service_name')))
             data = json.loads(request.POST['data'])
             client_id = request.POST.get('client_id')
             service_name = request.POST.get('service_name')
@@ -30,9 +32,9 @@ def service_data_report(request):
             host_obj = models.Host.objects.get(id=client_id)
             service_triggers = get_host_triggers(host_obj)
 
-            trigger_handler = data_processing.DataHandler(settings)
+            trigger_handler = data_processing.DataHandler(settings,connect_redis=False)
             for trigger in service_triggers:
-                trigger_handler.load_services_data_and_calulating()
+                trigger_handler.load_services_data_and_calulating(host_obj,trigger,REDIS_OBJ)
             print("service trigger::",service_triggers)
 
         except IndexError as e:

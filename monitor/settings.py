@@ -136,3 +136,5 @@ STATUS_DATA_OPTIMIZATION = {
     '30mins':[1800,600],    #14days
     '60mins':[3600,600],    #25days
 }
+
+TRIGGER_CHAN = 'trigger_event_channel'
